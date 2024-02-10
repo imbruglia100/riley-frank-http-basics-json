@@ -53,7 +53,7 @@ app.get('/', function (req, res) {
   const data = {
     categories
   }
-
+  console.log(req.header())
   return res.render('index', data);
 });
 
@@ -83,6 +83,8 @@ app.get('/products/best-selling', (req, res) => {
     title: 'Best-Selling Product: ',
     product: {
       ...product,
+
+      //1: {name: Cheesegrater}
       categories: productCategories,
       reviews: productReviews
     },
@@ -113,7 +115,7 @@ app.get('/products/:productId', (req, res) => {
   });
   const productReviews = Object.values(reviews)
     .filter(review => review.productId == productId);
-  
+
   const data = {
     product: {
       ...product,
@@ -135,7 +137,7 @@ app.post('/products', (req, res) => {
   if (!Array.isArray(productCategories)) {
     productCategories = [productCategories];
   }
-  
+
   productCategories.forEach(categoryTag => {
     const category = categories[categoryTag];
     if (!category) {
@@ -164,7 +166,7 @@ app.get('/products/:productId/edit', (req, res) => {
   if (!product) {
     throw new NotFoundError('Product not found');
   }
-  
+
   const data = {
     product,
     categories
@@ -227,7 +229,6 @@ app.post('/products/:productId/delete', (req, res) => {
   });
 
   delete products[productId];
-
   res.redirect('/products');
 });
 
@@ -267,7 +268,7 @@ app.get('/reviews/:reviewId/edit', (req, res) => {
   }
 
   const product = products[review.productId];
-  
+
   const data = {
     review,
     product,
@@ -351,7 +352,7 @@ app.use("/assets", express.static("assets", {
 
 app.use((req, res) => {
   res.status(404);
-  
+
   const data = {
     title: "404 - Page Not Found",
     categories
@@ -368,6 +369,6 @@ app.use((err, req, res, next) => {
   return res.render('error', data);
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log('Server is listening on port', port));
